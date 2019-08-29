@@ -13,3 +13,6 @@
 [submodule "openembedded-core"]
 	path = openembedded-core
 	url = https://github.com/openembedded/openembedded-core.git
+[submodule "bitbake"]
+	path = bitbake
+	url = git://git.openembedded.org/bitbake
