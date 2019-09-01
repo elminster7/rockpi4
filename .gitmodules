@@ -13,3 +13,6 @@
 [submodule "bitbake"]
 	path = bitbake
 	url = git://git.openembedded.org/bitbake
+[submodule "meta-rockchip"]
+	path = meta-rockchip
+	url = https://github.com/rockchip-linux/meta-rockchip.git
