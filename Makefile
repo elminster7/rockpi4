@@ -53,38 +53,20 @@ BBLAYERS ?= \
 	$(CURDIR)/meta-openembedded/meta-python \
 	$(CURDIR)/meta-openembedded/meta-webserver \
 	$(CURDIR)/openembedded-core/meta \
-	$(CURDIR)/meta-openpli \
-	$(CURDIR)/meta-dream \
-	$(CURDIR)/meta-dags \
-	$(CURDIR)/meta-vuplus \
-	$(CURDIR)/meta-xp \
-	$(CURDIR)/meta-xtrend \
-	$(CURDIR)/meta-formuler \
-	$(CURDIR)/meta-gfutures \
-	$(CURDIR)/meta-xpeedc \
-	$(CURDIR)/meta-zgemma \
-	$(CURDIR)/meta-edision \
-	$(CURDIR)/meta-miraclebox \
-	$(CURDIR)/meta-spycat \
-	$(CURDIR)/meta-gi \
-	$(CURDIR)/meta-sab \
-	$(CURDIR)/meta-gigablue \
-	$(CURDIR)/meta-amiko \
-	$(CURDIR)/meta-axasuhd \
-	$(CURDIR)/meta-maxytec \
+	$(CURDIR)/meta-rockchip \
 	$(CURDIR)/meta-local \
 	$(CURDIR)/meta-qt5
 
 CONFFILES = \
 	$(TOPDIR)/env.source \
-	$(TOPDIR)/conf/openpli.conf \
+	$(TOPDIR)/conf/rockchip.conf \
 	$(TOPDIR)/conf/bblayers.conf \
 	$(TOPDIR)/conf/local.conf \
 	$(TOPDIR)/conf/site.conf
 
 CONFDEPS = \
 	$(DEPDIR)/.env.source.$(BITBAKE_ENV_HASH) \
-	$(DEPDIR)/.openpli.conf.$(OPENPLI_CONF_HASH) \
+	$(DEPDIR)/.rockchip.conf.$(ROCKCHIP_CONF_HASH) \
 	$(DEPDIR)/.bblayers.conf.$(BBLAYERS_CONF_HASH) \
 	$(DEPDIR)/.local.conf.$(LOCAL_CONF_HASH)
 
@@ -126,7 +108,7 @@ init: $(BBLAYERS) $(CONFFILES)
 
 image: init
 	@echo 'Building image for $(MACHINE)'
-	@. $(TOPDIR)/env.source && cd $(TOPDIR) && bitbake openpli-enigma2-image
+	@. $(TOPDIR)/env.source && cd $(TOPDIR) && bitbake rockchip-basic-image
 
 feed: init
 	@echo 'Building feed for $(MACHINE)'
@@ -162,8 +144,8 @@ $(TOPDIR)/env.source: $(DEPDIR)/.env.source.$(BITBAKE_ENV_HASH)
 	@echo 'export IMAGE_TYPE=$(IMAGE_TYPE)' >> $@
 	@echo 'export PATH=$(CURDIR)/openembedded-core/scripts:$(CURDIR)/bitbake/bin:$${PATH}' >> $@
 
-OPENPLI_CONF_HASH := $(call hash, \
-	'OPENPLI_CONF_VERSION = "1"' \
+ROCKCHIP_CONF_HASH := $(call hash, \
+	'ROCKCHIP_VERSION = "1"' \
 	'CURDIR = "$(CURDIR)"' \
 	'BB_NUMBER_THREADS = "$(BB_NUMBER_THREADS)"' \
 	'PARALLEL_MAKE = "$(PARALLEL_MAKE)"' \
@@ -172,7 +154,7 @@ OPENPLI_CONF_HASH := $(call hash, \
 	'TMPDIR = "$(TMPDIR)"' \
 	)
 
-$(TOPDIR)/conf/openpli.conf: $(DEPDIR)/.openpli.conf.$(OPENPLI_CONF_HASH)
+$(TOPDIR)/conf/rockchip.conf: $(DEPDIR)/.rockchip.conf.$(ROCKCHIP_CONF_HASH)
 	@echo 'Generating $@'
 	@test -d $(@D) || mkdir -p $(@D)
 	@echo 'SSTATE_DIR = "$(SSTATE_DIR)"' >> $@
@@ -180,7 +162,7 @@ $(TOPDIR)/conf/openpli.conf: $(DEPDIR)/.openpli.conf.$(OPENPLI_CONF_HASH)
 	@echo 'BB_GENERATE_MIRROR_TARBALLS = "0"' >> $@
 	@echo 'BBINCLUDELOGS = "yes"' >> $@
 	@echo 'CONF_VERSION = "1"' >> $@
-	@echo 'DISTRO = "openpli"' >> $@
+	@echo 'DISTRO = "rockchip"' >> $@
 	@echo 'EXTRA_IMAGE_FEATURES = "debug-tweaks"' >> $@
 	@echo 'USER_CLASSES = "buildstats"' >> $@
 
@@ -194,7 +176,7 @@ $(TOPDIR)/conf/local.conf: $(DEPDIR)/.local.conf.$(LOCAL_CONF_HASH)
 	@echo 'Generating $@'
 	@test -d $(@D) || mkdir -p $(@D)
 	@echo 'TOPDIR = "$(TOPDIR)"' > $@
-	@echo 'require $(TOPDIR)/conf/openpli.conf' >> $@
+	@echo 'require $(TOPDIR)/conf/rockchip.conf' >> $@
 
 $(TOPDIR)/conf/site.conf: $(CURDIR)/site.conf
 	@ln -s ../../site.conf $@
